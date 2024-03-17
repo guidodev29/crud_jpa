@@ -13,21 +13,16 @@ public class Estudiante implements Serializable{
     }
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String carnet;
+    private String nombres;
+    private String apellidos;
 
-    public Estudiante( String id, String carnet, String nombres, String apellidos) {
-        this.id = id;
+    public Estudiante( String carnet, String nombres, String apellidos) {
+        
         this.carnet = carnet;
         this.nombres = nombres;
         this.apellidos = apellidos;
     }
     
-    private String carnet;
-    private String nombres;
-    private String apellidos;
-
-    public void setNombre(String mateo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

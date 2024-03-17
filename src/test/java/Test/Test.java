@@ -15,12 +15,27 @@ public class Test {
         //recuperarPorId();
     }
     
+    private static void crearEstudiante2() {        
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemoJpaLocal");
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction tx = em.getTransaction();
+    tx.begin();
+    
+    // Utilizar el valor del carnet definido en la clase Estudiante
+    Estudiante estudiante = new Estudiante("AB123456", "Anthodany", "Hernández"); // Cambia "AB123456" al valor deseado
+    
+    em.persist(estudiante);
+    tx.commit();
+    log.debug("Objeto: " + estudiante);
+    em.close();
+}
+
     private static void crearEstudiante(){        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemoJpaLocal");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        Estudiante estudiante = new Estudiante("1","HG100721", "Anthony","Hernández");
+        Estudiante estudiante = new Estudiante("HG100", "Anthodany","Hernsdadsández");
         em.persist(estudiante);
         tx.commit();
         log.debug("Objeto: " + estudiante);
@@ -49,6 +64,6 @@ public class Test {
         tx.commit();
         System.out.println("Objeto Recuperado" + est);
         
-        est.setNombre("Mateo");
+        //est.setNombre("Mateo");
     }
 }
