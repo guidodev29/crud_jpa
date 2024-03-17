@@ -11,34 +11,25 @@ public class Test {
     static Logger log = LogManager.getRootLogger();
     
     public static void main(String[] args){
-        crearEstudiante();
+        //crearEstudiante();
         //recuperarPorId();
+        //actualizarEstudiante();
+        eliminarEstudiante();
     }
     
-    private static void crearEstudiante2() {        
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemoJpaLocal");
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction tx = em.getTransaction();
-    tx.begin();
-    
-    // Utilizar el valor del carnet definido en la clase Estudiante
-    Estudiante estudiante = new Estudiante("AB123456", "Anthodany", "Hernández"); // Cambia "AB123456" al valor deseado
-    
-    em.persist(estudiante);
-    tx.commit();
-    log.debug("Objeto: " + estudiante);
-    em.close();
-}
-
     private static void crearEstudiante(){        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemoJpaLocal");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        Estudiante estudiante = new Estudiante("HG100", "Anthodany","Hernsdadsández");
-        em.persist(estudiante);
+        Estudiante est = new Estudiante(6,"FR896547", "Daniel","Fernández");
+        em.persist(est);
         tx.commit();
-        log.debug("Objeto: " + estudiante);
+        System.out.println("#### NUEVO REGISTRO INGRESADO ####");
+        System.out.println("ID: " + est.getId());
+        System.out.println("Carnet: " + est.getCarnet());
+        System.out.println("Nombres: " + est.getNombres());
+        System.out.println("Apellidos: " + est.getApellidos());
         em.close();
     }
     
@@ -47,10 +38,17 @@ public class Test {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        
-        Estudiante est = em.find(Estudiante.class, 3);
+        Estudiante est = em.find(Estudiante.class, 7);
         tx.commit();
-        System.out.println("Objeto " + est);
+        if (est != null) {
+        System.out.println("####REGISTRO ENCONTRADO####");
+        System.out.println("ID: " + est.getId());
+        System.out.println("Carnet: " + est.getCarnet());
+        System.out.println("Nombres: " + est.getNombres());
+        System.out.println("Apellidos: " + est.getApellidos());
+    } else {
+        System.out.println("No se encontró ningún estudiante con ese ID");
+    }
         em.close();
     }
     
@@ -58,12 +56,50 @@ public class Test {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemoJpaLocal");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
+        tx.begin(); //INICIA TRANSFERENCIA
+        
+        Estudiante est = em.find(Estudiante.class, 4);
+        tx.commit();//FINALIZA TRANSFERENCIA        
+        System.out.println("####REGISTRO ENCONTRADO ####");
+        System.out.println("ID: " + est.getId());
+        System.out.println("Carnet: " + est.getCarnet());
+        System.out.println("Nombres: " + est.getNombres());
+        System.out.println("Apellidos: " + est.getApellidos());
+        
+        est.setNombres("MaRIANA"); //MODIFICAMOS EL VALOR
+        EntityTransaction tx2 = em.getTransaction(); //NUEVA TRANSACTION
+        tx2.begin();// LA EMPEZAMOS
+        
+        em.merge(est);// ELIMINAMOS EL REGISTRO ANTERIOR
+        tx2.commit();
+        System.out.println("####REGISTRO ACTUALIZADO ####");
+        System.out.println("ID: " + est.getId());
+        System.out.println("Carnet: " + est.getCarnet());
+        System.out.println("Nombres: " + est.getNombres());
+        System.out.println("Apellidos: " + est.getApellidos());
+        em.close();
+        
+    }
+    
+    private static void eliminarEstudiante(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemoJpaLocal");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
         tx.begin();
         
-        Estudiante est = em.find(Estudiante.class, 3);
-        tx.commit();
-        System.out.println("Objeto Recuperado" + est);
+        Estudiante est = em.find(Estudiante.class, 7);
+        tx.commit();     
+        System.out.println("####REGISTRO ENCONTRADO ####");
+        System.out.println("Nombres: " + est.getNombres());
+        System.out.println("Apellidos: " + est.getApellidos());
         
-        //est.setNombre("Mateo");
+        EntityTransaction tx2 = em.getTransaction(); 
+        tx2.begin();
+        
+        em.remove(em.merge(est));
+        tx2.commit();
+        System.out.println("####REGISTRO ELIMINADO ####");
+        em.close();
+
     }
 }
